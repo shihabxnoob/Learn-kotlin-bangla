@@ -5,9 +5,10 @@ import { bnDigits } from "../utils/bn";
 
 interface ThemeSwitcherProps {
   compact?: boolean;
+  pill?: boolean;
 }
 
-export default function ThemeSwitcher({ compact = false }: ThemeSwitcherProps) {
+export default function ThemeSwitcher({ compact = false, pill = false }: ThemeSwitcherProps) {
   const { theme, setTheme, bgGlow, setBgGlow, bgLevel } = useTheme();
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -41,7 +42,11 @@ export default function ThemeSwitcher({ compact = false }: ThemeSwitcherProps) {
         onClick={() => setOpen((prev) => !prev)}
         aria-label="থিম ও ব্যাকগ্রাউন্ড পরিবর্তন করুন"
         aria-expanded={open}
-        className="group flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-2.5 py-1.5 font-bengali text-[12.5px] font-semibold text-white/90 transition-colors duration-150 hover:border-white/25 hover:bg-white/[0.08] sm:px-3 sm:py-2"
+        className={
+          pill
+            ? "group flex items-center gap-1.5 rounded-full border border-pink-500/25 bg-[#140b1c]/80 backdrop-blur-md px-3 py-1.5 font-bengali text-[12.5px] font-semibold text-white/90 transition-all duration-150 hover:border-pink-400/50 hover:bg-pink-500/15 hover:text-white shadow-[0_4px_16px_-4px_rgba(0,0,0,0.5)] active:scale-95"
+            : "group flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-2.5 py-1.5 font-bengali text-[12.5px] font-semibold text-white/90 transition-colors duration-150 hover:border-white/25 hover:bg-white/[0.08] sm:px-3 sm:py-2"
+        }
         style={{
           borderColor: `var(--theme-primary, #ff758f)40`,
         }}

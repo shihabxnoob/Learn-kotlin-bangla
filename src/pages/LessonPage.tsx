@@ -693,7 +693,7 @@ const VariableVisualizer = memo(function VariableVisualizer() {
 const levelFor = (id: number) =>
   id <= 3 ? "বেসিক লেভেল" : id <= 6 ? "ইন্টারমিডিয়েট লেভেল" : "অ্যাডভান্সড লেভেল";
 
-const ReadingProgressIndicator = memo(function ReadingProgressIndicator({
+const ProgressChip = memo(function ProgressChip({
   scrollYProgress,
   accent,
 }: {
@@ -715,109 +715,76 @@ const ReadingProgressIndicator = memo(function ReadingProgressIndicator({
 
   return (
     <div
-      className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-mono font-medium border transition-colors duration-150"
+      className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12px] font-mono font-medium select-none shadow-[0_4px_16px_-4px_rgba(0,0,0,0.5)] transition-[border-color,color] duration-150"
       style={{
-        borderColor: `${accent}33`,
-        background: `${accent}10`,
+        borderColor: `${accent}35`,
+        background: "var(--theme-card-bg, rgba(16, 9, 24, 0.82))",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        boxShadow: `0 4px 14px -4px ${accent}20, 0 2px 6px rgba(0,0,0,0.4)`,
         color: pct >= 95 ? "#10b981" : "var(--theme-primary, #ff758f)",
       }}
       title={`পড়ার অগ্রগতি: ${pct}%`}
     >
-      <span className="hidden sm:inline text-[10.5px] font-bengali text-slate-400">পড়া:</span>
-      <span>{pct}%</span>
+      <span
+        className="size-1.5 rounded-full transition-colors duration-150"
+        style={{ background: pct >= 95 ? "#10b981" : accent }}
+      />
+      <span className="font-sans font-medium text-[11.5px] sm:text-[12px]">Progress ({pct}%)</span>
     </div>
   );
 });
 
-interface LessonBarProps {
+interface FloatingLessonNavProps {
   moduleTitle: string;
   moduleSlug: string;
-  lessonTitle: string;
-  lessonNumber: number;
-  totalLessons: number;
   accent: string;
   scrollYProgress: MotionValue<number>;
 }
 
-const LessonBar = memo(function LessonBar({
+const FloatingLessonNav = memo(function FloatingLessonNav({
   moduleTitle,
   moduleSlug,
-  lessonTitle,
-  lessonNumber,
-  totalLessons,
   accent,
   scrollYProgress,
-}: LessonBarProps) {
+}: FloatingLessonNavProps) {
   return (
-    <header
-      aria-label="লেসন নেভিগেশন ও অগ্রগতি"
-      className="sticky top-0 z-40 w-full border-b backdrop-blur-md transition-colors duration-200"
-      style={{
-        borderColor: "var(--theme-surface-border, rgba(255, 117, 143, 0.18))",
-        background: "var(--theme-card-bg, rgba(14, 7, 20, 0.92))",
-        boxShadow: "0 4px 20px -4px rgba(0, 0, 0, 0.5)",
-      }}
+    <nav
+      aria-label="লেসন নেভিগেশন ও ইউটিলিটি চিপস"
+      className="sticky top-3 sm:top-4 z-40 w-full pointer-events-none mb-3 sm:mb-4"
     >
-      <div className="mx-auto flex h-11 sm:h-12 max-w-[50rem] items-center justify-between px-3 sm:px-4">
-        {/* Left: Back arrow + module name */}
-        <div className="flex items-center gap-2 min-w-0 pr-2">
+      <div className="flex flex-wrap items-center justify-between gap-2.5">
+        {/* Navigation chip: ← [Module]-এ ফিরে যান */}
+        <div className="pointer-events-auto">
           <Link
             to={`/${moduleSlug}`}
             aria-label={`${moduleTitle}-এ ফিরে যান`}
             title={`${moduleTitle}-এ ফিরে যান`}
-            className="group flex size-8 sm:size-8.5 items-center justify-center rounded-lg border border-pink-500/20 bg-pink-500/5 text-pink-300 transition-all duration-150 hover:border-pink-400/50 hover:bg-pink-500/15 hover:text-white active:scale-95 flex-none"
+            className="group inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 font-bengali text-[13px] text-pink-200 transition-all duration-150 hover:border-pink-400/50 hover:bg-pink-500/15 hover:text-white active:scale-95 shadow-[0_4px_16px_-4px_rgba(0,0,0,0.5)]"
+            style={{
+              borderColor: `${accent}40`,
+              background: "var(--theme-card-bg, rgba(16, 9, 24, 0.82))",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              boxShadow: `0 4px 16px -4px ${accent}25, 0 2px 6px rgba(0,0,0,0.4)`,
+            }}
           >
-            <ArrowLeft className="size-4 transition-transform duration-150 group-hover:-translate-x-0.5" />
+            <ArrowLeft
+              className="size-3.5 transition-transform duration-150 group-hover:-translate-x-0.5"
+              style={{ color: accent }}
+            />
+            <span className="font-medium">{moduleTitle}-এ ফিরে যান</span>
+            <ThemeChipIcon size={12} color="var(--theme-primary, #ff758f)" />
           </Link>
-
-          <Link
-            to={`/${moduleSlug}`}
-            className="hidden sm:inline-flex items-center text-xs font-bengali text-pink-300/70 hover:text-pink-200 transition-colors truncate max-w-[130px]"
-            title={`${moduleTitle}-এ ফিরে যান`}
-          >
-            {moduleTitle}
-          </Link>
-          <span className="hidden sm:inline text-white/20 text-xs select-none">/</span>
-
-          {/* Current Lesson Name */}
-          <div className="flex items-center gap-1.5 min-w-0">
-            <span
-              className="hidden xs:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold flex-none"
-              style={{
-                background: `${accent}18`,
-                color: accent,
-                border: `1px solid ${accent}35`,
-              }}
-            >
-              {lessonNumber}/{totalLessons}
-            </span>
-            <h1 className="font-bengali text-[13px] sm:text-[14px] font-semibold text-slate-100 truncate tracking-tight">
-              {lessonTitle}
-            </h1>
-          </div>
         </div>
 
-        {/* Right: Reading progress indicator + compact theme switcher */}
-        <div className="flex items-center gap-2 flex-none ml-2">
-          <ReadingProgressIndicator
-            scrollYProgress={scrollYProgress}
-            accent={accent}
-          />
-
-          <ThemeSwitcher compact />
+        {/* Right utility chips: Progress + Theme */}
+        <div className="flex items-center gap-2 pointer-events-auto">
+          <ProgressChip scrollYProgress={scrollYProgress} accent={accent} />
+          <ThemeSwitcher compact pill />
         </div>
       </div>
-
-      {/* Embedded GPU-accelerated reading progress bar on bottom edge */}
-      <motion.div
-        aria-hidden
-        className="absolute bottom-0 inset-x-0 h-[2px] origin-left pointer-events-none transform-gpu"
-        style={{
-          scaleX: scrollYProgress,
-          background: `linear-gradient(to right, ${accent}, var(--theme-primary, #ff758f))`,
-        }}
-      />
-    </header>
+    </nav>
   );
 });
 
@@ -865,18 +832,17 @@ export default function LessonPage() {
 
   return (
     <div className="relative z-10 w-full overflow-x-clip min-h-screen">
-      {/* Mobile-first compact sticky reading-focused Lesson Bar */}
-      <LessonBar
-        moduleTitle={module.title}
-        moduleSlug={module.slug}
-        lessonTitle={lesson.title}
-        lessonNumber={lesson.id}
-        totalLessons={module.lessons.length}
-        accent={AC}
-        scrollYProgress={scrollYProgress}
+      {/* Zero-overhead hairline reading progress bar at top edge */}
+      <motion.div
+        aria-hidden
+        className="fixed top-0 inset-x-0 h-[2px] z-50 origin-left pointer-events-none transform-gpu"
+        style={{
+          scaleX: scrollYProgress,
+          background: `linear-gradient(to right, ${AC}, var(--theme-primary, #ff758f))`,
+        }}
       />
 
-      <div className="relative mx-auto w-full max-w-[45rem] px-4 pb-28 pt-5 sm:px-6 md:pt-7">
+      <div className="relative mx-auto w-full max-w-[45rem] px-4 pb-28 pt-3 sm:px-6 md:pt-5">
         {/* top accent glow — static GPU accelerated */}
         <div
           aria-hidden
@@ -888,28 +854,24 @@ export default function LessonPage() {
           />
         </div>
 
-      {/* back to module */}
-      <motion.div variants={rise} initial="hidden" animate="show">
-        <Link
-          to={`/${module.slug}`}
-          className="group inline-flex items-center gap-2 rounded-full border border-pink-500/20 bg-[#160c1d]/80 px-4 py-2 font-bengali text-[13px] text-pink-200 transition-all duration-200 hover:border-pink-400/40 hover:bg-pink-500/10 hover:text-white"
-        >
-          <ArrowLeft className="size-4 transition-transform duration-200 group-hover:-translate-x-0.5 text-pink-300" />
-          <span>{module.title}-এ ফিরে যান</span>
-          <ThemeChipIcon size={12} color="var(--theme-primary, #ff758f)" />
-        </Link>
-      </motion.div>
+        {/* Compact floating chip-based navigation */}
+        <FloatingLessonNav
+          moduleTitle={module.title}
+          moduleSlug={module.slug}
+          accent={AC}
+          scrollYProgress={scrollYProgress}
+        />
 
-      {/* lesson header */}
-      <motion.header
-        variants={group}
-        initial="hidden"
-        animate="show"
-        className="relative mt-9 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-[#141028] via-[#0e0a1c] to-[#090612] p-6 shadow-2xl sm:p-8"
-        style={{
-          boxShadow: `0 20px 50px -15px ${AC}26, inset 0 1px 0 rgba(255,255,255,0.12)`,
-        }}
-      >
+        {/* lesson header */}
+        <motion.header
+          variants={group}
+          initial="hidden"
+          animate="show"
+          className="relative mt-4 sm:mt-5 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-[#141028] via-[#0e0a1c] to-[#090612] p-6 shadow-2xl sm:p-8"
+          style={{
+            boxShadow: `0 20px 50px -15px ${AC}26, inset 0 1px 0 rgba(255,255,255,0.12)`,
+          }}
+        >
         {/* glowing radiant background blobs scaled by intensity */}
         <div
           aria-hidden
