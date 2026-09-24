@@ -1,0 +1,6 @@
+{
+  "name": "Kotlin Journey",
+  "description": "Kotlin Fundamentals থেকে Advanced concepts পর্যন্ত আধুনিক বাংলা লার্নিং কারিকুলাম ও রোডম্যাপ।",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

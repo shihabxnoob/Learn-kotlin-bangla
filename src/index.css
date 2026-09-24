@@ -1,0 +1,245 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", "Anek Bangla", "Noto Sans Bengali", "Hind Siliguri", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Anek Bangla", "Noto Sans Bengali", "Hind Siliguri", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Anek Bangla", ui-monospace, SFMono-Regular, monospace;
+  --font-bengali: "Anek Bangla", "Noto Sans Bengali", "Hind Siliguri", ui-sans-serif, system-ui, sans-serif;
+
+  --color-void: var(--color-void, #0e0714);
+  --color-panel: var(--color-panel, #170d20);
+}
+
+/* ---------- Theme Definitions ---------- */
+:root {
+  --bg-glow-scale: 0.6;
+}
+
+:root,
+[data-theme="kitty"] {
+  --color-void: #0e0714;
+  --color-panel: #170d20;
+  --theme-primary: #ff758f;
+  --theme-secondary: #c77dff;
+  --theme-tertiary: #ffa6c1;
+  --theme-glow: rgba(255, 117, 143, 0.4);
+  --theme-secondary-glow: rgba(199, 125, 255, 0.25);
+  --theme-tertiary-glow: rgba(255, 77, 109, 0.15);
+  --theme-grid-tint: rgba(255, 117, 143, 0.04);
+  --theme-gradient: linear-gradient(92deg, #ff758f 0%, #ff4d6d 28%, #c77dff 62%, #ffa6c1 95%);
+  --theme-scrollbar: linear-gradient(180deg, rgba(255, 117, 143, 0.7), rgba(199, 125, 255, 0.6));
+  --theme-surface-border: rgba(255, 117, 143, 0.2);
+  --theme-badge-bg: rgba(255, 117, 143, 0.1);
+  --theme-card-bg: rgba(22, 12, 30, 0.85);
+  --theme-card-hover: rgba(30, 16, 40, 0.95);
+}
+
+[data-theme="winter"] {
+  --color-void: #030712;
+  --color-panel: #0b1528;
+  --theme-primary: #38bdf8;
+  --theme-secondary: #818cf8;
+  --theme-tertiary: #22d3ee;
+  --theme-glow: rgba(56, 189, 248, 0.32);
+  --theme-secondary-glow: rgba(129, 140, 248, 0.22);
+  --theme-tertiary-glow: rgba(34, 211, 238, 0.16);
+  --theme-grid-tint: rgba(56, 189, 248, 0.035);
+  --theme-gradient: linear-gradient(92deg, #38bdf8 0%, #22d3ee 30%, #818cf8 68%, #a78bfa 100%);
+  --theme-scrollbar: linear-gradient(180deg, rgba(56, 189, 248, 0.7), rgba(129, 140, 248, 0.6));
+  --theme-surface-border: rgba(56, 189, 248, 0.22);
+  --theme-badge-bg: rgba(56, 189, 248, 0.1);
+  --theme-card-bg: rgba(11, 21, 40, 0.85);
+  --theme-card-hover: rgba(15, 29, 56, 0.95);
+}
+
+/* Background Intensity Levels (OLED Subtle / Balanced / Vibrant Glow) */
+[data-bg-intensity="subtle"] {
+  --color-void: #030206;
+}
+[data-theme="winter"][data-bg-intensity="subtle"] {
+  --color-void: #010409;
+}
+
+[data-bg-intensity="balanced"] {
+  --color-void: #0e0714;
+}
+[data-theme="winter"][data-bg-intensity="balanced"] {
+  --color-void: #030712;
+}
+
+[data-bg-intensity="vibrant"] {
+  --color-void: #120719;
+}
+[data-theme="winter"][data-bg-intensity="vibrant"] {
+  --color-void: #060f22;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-void);
+  color: #f8f0f6;
+  line-height: 1.65;
+  transition: background-color 0.3s ease;
+}
+
+::selection {
+  background: var(--theme-glow);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 3px;
+}
+
+/* ---------- theme scrollbar ---------- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-void);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--theme-scrollbar);
+  border-radius: 8px;
+  border: 2px solid var(--color-void);
+}
+
+/* ---------- background grid with theme tint ---------- */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--theme-grid-tint) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--theme-grid-tint) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 100% 80% at 50% 0%, black 20%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 100% 80% at 50% 0%, black 20%, transparent 78%);
+}
+
+/* ---------- diagonal micro stripes ---------- */
+.bg-stripes {
+  background-image: repeating-linear-gradient(
+    115deg,
+    rgb(255 182 217 / 0.025) 0 1.5px,
+    transparent 1.5px 10px
+  );
+}
+
+/* ---------- film grain overlay ---------- */
+.noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+}
+
+/* ---------- animated gradient text ---------- */
+.text-gradient-kotlin {
+  background: var(--theme-gradient);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-pan 7s ease-in-out infinite;
+}
+
+/* ---------- milestone card depth with kitty pink accent ---------- */
+.milestone-card {
+  --ac: #ff758f;
+  transition:
+    border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.milestone-card:hover {
+  border-color: color-mix(in srgb, var(--ac) 50%, transparent);
+  box-shadow:
+    0 24px 64px -28px color-mix(in srgb, var(--ac) 55%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--ac) 24%, transparent);
+}
+
+/* ---------- lesson rail card (module page) ---------- */
+.rail-card {
+  --ac: #ff758f;
+  transition: border-color 0.3s ease;
+}
+.rail-card:hover {
+  border-color: color-mix(in srgb, var(--ac) 45%, transparent);
+}
+.rail-card .rail-arrow {
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
+}
+.rail-card:hover .rail-arrow {
+  color: var(--ac);
+  border-color: color-mix(in srgb, var(--ac) 50%, transparent);
+  transform: translateX(3px);
+}
+
+/* ---------- keyframes ---------- */
+@keyframes gradient-pan {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  }
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--flt-r, 0deg));
+  }
+  50% {
+    transform: translateY(-14px) rotate(var(--flt-r, 0deg));
+  }
+}
+.animate-float-y {
+  animation: float-y 7s ease-in-out infinite;
+}
+
+@keyframes scroll-dot {
+  0% {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(34px);
+    opacity: 0;
+  }
+}
+.animate-scroll-dot {
+  animation: scroll-dot 2.1s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.85);
+  }
+}
+.animate-pulse-soft {
+  animation: pulse-soft 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-y,
+  .animate-scroll-dot,
+  .animate-pulse-soft,
+  .text-gradient-kotlin {
+    animation: none;
+  }
+}
