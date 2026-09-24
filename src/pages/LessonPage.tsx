@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useState, useMemo, memo, type ReactNode } from "react";
 import { Link, Navigate, useParams } from "react-router";
 import { motion, useScroll, type Variants } from "framer-motion";
 import {
@@ -107,7 +107,12 @@ const PN = ({ children }: { children: ReactNode }) => (
   <span className="text-slate-400">{children}</span>
 );
 
+const tokenLineCache = new Map<string, ReactNode>();
+
 function renderTokens(line: string): ReactNode {
+  const cached = tokenLineCache.get(line);
+  if (cached !== undefined) return cached;
+
   const tokenRegex =
     /(\/\/[^\n]*|\/\*.*|\*\/|^\s*\*.*)|("""[\s\S]*?"""|"[^"\n]*")|('(?:[^'\\]|\\.)')|\b(fun|val|var|class|object|interface|if|else|when|for|while|return|package|import)\b|\b(Int|Double|Float|Long|Boolean|Char|String|Byte|Short)\b|\b(println|print|main|toDouble|toInt|toLong|toFloat|toString|trimIndent)\b|(\b\d+(?:\.\d+)?(?:[fFL])?\b)|(==|!=|<=|>=|\+\+|--|&&|\|\||\+=|-=|\*=|\/=|[%+\-*\/=<>!&|])|([{}()[\],;:])|([^\s"'{}()[\],;:=+*\/\-<>!&|%]+|\s+)/g;
   const elements: ReactNode[] = [];
@@ -149,11 +154,13 @@ function renderTokens(line: string): ReactNode {
       );
     }
   }
-  return elements.length > 0 ? elements : <span className="text-slate-200">{line}</span>;
+  const result = elements.length > 0 ? elements : <span className="text-slate-200">{line}</span>;
+  tokenLineCache.set(line, result);
+  return result;
 }
 
-const DynamicKotlinCode = ({ code }: { code: string }) => {
-  const lines = code.trim().split("\n");
+const DynamicKotlinCode = memo(function DynamicKotlinCode({ code }: { code: string }) {
+  const lines = useMemo(() => code.trim().split("\n"), [code]);
   return (
     <>
       {lines.map((l, i) => (
@@ -163,7 +170,7 @@ const DynamicKotlinCode = ({ code }: { code: string }) => {
       ))}
     </>
   );
-};
+});
 
 /** Render specialized colored token badges */
 function renderTokenBadge(rawToken: string, key: number, wasQuoted = false): ReactNode {
@@ -347,9 +354,13 @@ function renderTokenBadge(rawToken: string, key: number, wasQuoted = false): Rea
   );
 }
 
+const bengaliTextCache = new Map<string, ReactNode>();
+
 /** Formatter to highlight code terms, quotes, and keywords in Bengali text */
 function formatBengaliText(text: string): ReactNode {
   if (!text) return null;
+  const cached = bengaliTextCache.get(text);
+  if (cached !== undefined) return cached;
 
   // Regex pattern matching:
   // 1. Double double quotes: ""...""
@@ -412,11 +423,13 @@ function formatBengaliText(text: string): ReactNode {
     parts.push(text.substring(lastIndex));
   }
 
-  return parts.length > 0 ? parts : text;
+  const result = parts.length > 0 ? parts : text;
+  bengaliTextCache.set(text, result);
+  return result;
 }
 
 /** Interactive Visual Diagram: Variable as a Memory Container */
-function VariableVisualizer() {
+const VariableVisualizer = memo(function VariableVisualizer() {
   const [valAttempt, setValAttempt] = useState(false);
   const [valShake, setValShake] = useState(false);
   const [varAge, setVarAge] = useState(22);
@@ -674,7 +687,7 @@ function VariableVisualizer() {
       </div>
     </div>
   );
-}
+});
 
 const levelFor = (id: number) =>
   id <= 3 ? "বেসিক লেভেল" : id <= 6 ? "ইন্টারমিডিয়েট লেভেল" : "অ্যাডভান্সড লেভেল";
@@ -726,20 +739,20 @@ export default function LessonPage() {
       {/* Zero-overhead GPU reading progress bar driven by transform: scaleX */}
       <motion.div
         aria-hidden
-        className="fixed top-0 inset-x-0 h-[2.5px] z-50 origin-left pointer-events-none"
+        className="fixed top-0 inset-x-0 h-[2.5px] z-50 origin-left pointer-events-none transform-gpu"
         style={{
           scaleX: scrollYProgress,
           background: `linear-gradient(to right, ${AC}, var(--theme-primary, #ff758f))`,
         }}
       />
 
-      {/* top accent glow — static */}
+      {/* top accent glow — static GPU accelerated */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 overflow-hidden -z-10"
+        className="pointer-events-none absolute inset-0 overflow-hidden -z-10 transform-gpu"
       >
         <div
-          className="absolute left-1/2 top-16 h-[300px] w-[520px] max-w-[100vw] -translate-x-1/2 rounded-full blur-[120px]"
+          className="absolute left-1/2 top-16 h-[260px] w-[480px] max-w-[100vw] -translate-x-1/2 rounded-full blur-[64px]"
           style={{ background: `${AC}1a` }}
         />
       </div>
@@ -1357,7 +1370,7 @@ export default function LessonPage() {
           <motion.div variants={rise}>
             <Link
               to={`/${module.slug}/${prevLesson.slug}`}
-              className="group relative overflow-hidden flex h-full items-center gap-3.5 rounded-2xl border border-pink-500/20 bg-[#160c1e]/85 p-4 transition-all duration-300 hover:border-pink-400/50 hover:bg-pink-500/10 hover:shadow-lg"
+              className="group relative overflow-hidden flex h-full items-center gap-3.5 rounded-2xl border border-pink-500/20 bg-[#160c1e]/85 p-4 transition-[border-color,background-color,box-shadow] duration-300 hover:border-pink-400/50 hover:bg-pink-500/10 hover:shadow-lg"
               style={{
                 boxShadow: "0 6px 20px -6px rgba(255, 117, 143, 0.2)",
               }}
@@ -1419,7 +1432,7 @@ export default function LessonPage() {
           <motion.div variants={rise}>
             <Link
               to={`/${module.slug}/${nextLesson.slug}`}
-              className="group relative overflow-hidden flex h-full items-center justify-between gap-3.5 rounded-2xl border p-4 text-right transition-all duration-300 hover:border-pink-400/50 hover:scale-[1.01]"
+              className="group relative overflow-hidden flex h-full items-center justify-between gap-3.5 rounded-2xl border p-4 text-right transition-[border-color,box-shadow,transform] duration-300 hover:border-pink-400/50 hover:scale-[1.01]"
               style={{
                 borderColor: `${AC}50`,
                 background: `linear-gradient(135deg, ${AC}16, #160c1e 75%)`,
@@ -1466,7 +1479,7 @@ export default function LessonPage() {
           <motion.div variants={rise}>
             <Link
               to={`/${nextModule.slug}`}
-              className="group flex h-full items-center justify-end gap-3.5 rounded-2xl border p-4 text-right transition-all duration-300 hover:border-pink-400/60 hover:scale-[1.01]"
+              className="group flex h-full items-center justify-end gap-3.5 rounded-2xl border p-4 text-right transition-[border-color,box-shadow,transform] duration-300 hover:border-pink-400/60 hover:scale-[1.01]"
               style={{
                 borderColor: `${AC}50`,
                 background: `linear-gradient(135deg, ${AC}25, #170d22)`,

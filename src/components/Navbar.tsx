@@ -96,7 +96,7 @@ export default function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 w-full max-w-full overflow-x-clip">
       <div
-        className="pointer-events-none absolute inset-0 border-b backdrop-blur-md transition-all duration-300"
+        className="pointer-events-none absolute inset-0 border-b backdrop-blur-md transition-[border-color,background-color,box-shadow] duration-300"
         style={{
           borderColor: scrolled ? "var(--theme-surface-border, rgba(255,117,143,0.15))" : "transparent",
           background: scrolled

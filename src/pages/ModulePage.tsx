@@ -56,10 +56,10 @@ export default function ModulePage() {
       {/* Top accent glow matching this milestone's color, scaled by user's bg intensity */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 overflow-hidden -z-10"
+        className="pointer-events-none absolute inset-0 overflow-hidden -z-10 transform-gpu"
       >
         <div
-          className="absolute left-1/2 top-16 h-[340px] w-[560px] max-w-[100vw] -translate-x-1/2 rounded-full blur-[130px] transition-opacity duration-300"
+          className="absolute left-1/2 top-16 h-[300px] w-[520px] max-w-[100vw] -translate-x-1/2 rounded-full blur-[64px] transition-opacity duration-300"
           style={{
             background: `radial-gradient(circle, ${ac}33 0%, var(--theme-glow) 50%, transparent 80%)`,
             opacity: "calc(0.7 * var(--bg-glow-scale, 0.6))",

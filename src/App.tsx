@@ -11,9 +11,11 @@ import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import { ThemeProvider } from "./context/ThemeContext";
 
-// Lazy-load heavier secondary pages to significantly shrink initial bundle size
-const ModulePage = lazy(() => import("./pages/ModulePage"));
-const LessonPage = lazy(() => import("./pages/LessonPage"));
+// Lazy-load heavier secondary pages with idle prefetching to significantly shrink initial bundle size
+const loadModulePage = () => import("./pages/ModulePage");
+const loadLessonPage = () => import("./pages/LessonPage");
+const ModulePage = lazy(loadModulePage);
+const LessonPage = lazy(loadLessonPage);
 
 /**
  * Global, fixed background layers:
@@ -46,7 +48,7 @@ function BackgroundFX() {
 
 /**
  * Scroll behaviour on route change:
- * - "/#roadmap" → smooth-scroll to the roadmap section
+ * - "/#roadmap" → smooth-scroll directly to the roadmap section without top-jump
  * - everything else → back to the top
  */
 function ScrollManager() {
@@ -56,11 +58,8 @@ function ScrollManager() {
     if (hash) {
       const el = document.querySelector(hash);
       if (el) {
-        const timer = window.setTimeout(
-          () => el.scrollIntoView({ behavior: "smooth", block: "start" }),
-          80
-        );
-        return () => window.clearTimeout(timer);
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
       }
     }
     window.scrollTo(0, 0);
@@ -70,15 +69,34 @@ function ScrollManager() {
 }
 
 function AppShell() {
-  const location = useLocation();
+  // Preload secondary route chunks during browser idle time so transitions feel instantaneous
+  useEffect(() => {
+    const hasIdle = typeof window !== "undefined" && "requestIdleCallback" in window;
+    const idleId = hasIdle
+      ? window.requestIdleCallback(() => {
+          loadModulePage();
+          loadLessonPage();
+        })
+      : window.setTimeout(() => {
+          loadModulePage();
+          loadLessonPage();
+        }, 1200);
+
+    return () => {
+      if (hasIdle) {
+        window.cancelIdleCallback(idleId as number);
+      } else {
+        window.clearTimeout(idleId as number);
+      }
+    };
+  }, []);
 
   return (
     <div className="relative min-h-screen bg-[var(--color-void)] font-sans text-slate-200 antialiased transition-colors duration-300">
       <BackgroundFX />
       <Navbar />
 
-      {/* keying by pathname replays the light mount fade on each page */}
-      <main key={location.pathname} className="relative z-10">
+      <main className="relative z-10">
         <Suspense
           fallback={
             <div className="flex min-h-[70vh] items-center justify-center">
@@ -89,7 +107,7 @@ function AppShell() {
             </div>
           }
         >
-          <Routes location={location}>
+          <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/:slug" element={<ModulePage />} />
             <Route path="/:slug/:lessonSlug" element={<LessonPage />} />

@@ -59,7 +59,7 @@ export default function Hero() {
         className="absolute left-[5%] top-[30%] hidden lg:block xl:left-[8%]"
       >
         <div
-          className="animate-float-y rounded-2xl border px-4 py-3 font-mono text-[11px] text-pink-200/70 shadow-[0_16px_48px_-16px_rgba(0,0,0,0.5)] backdrop-blur-md"
+          className="animate-float-y rounded-2xl border px-4 py-3 font-mono text-[11px] text-pink-200/70 shadow-[0_16px_48px_-16px_rgba(0,0,0,0.5)] transform-gpu"
           style={{
             borderColor: "var(--theme-surface-border)",
             background: "var(--theme-card-bg)",
@@ -90,7 +90,7 @@ export default function Hero() {
         className="absolute right-[5%] top-[25%] hidden lg:block xl:right-[8%]"
       >
         <div
-          className="animate-float-y rounded-2xl border px-4 py-3 font-mono text-[11px] text-pink-200/70 shadow-[0_16px_48px_-16px_rgba(0,0,0,0.5)] backdrop-blur-md"
+          className="animate-float-y rounded-2xl border px-4 py-3 font-mono text-[11px] text-pink-200/70 shadow-[0_16px_48px_-16px_rgba(0,0,0,0.5)] transform-gpu"
           style={{
             borderColor: "var(--theme-surface-border)",
             background: "var(--theme-card-bg)",
@@ -116,7 +116,7 @@ export default function Hero() {
         className="absolute bottom-[24%] right-[11%] hidden xl:block"
       >
         <div
-          className="animate-float-y flex items-center gap-2 rounded-xl border px-3.5 py-2 font-bengali text-[11.5px] text-pink-200/70 shadow-[0_16px_48px_-16px_rgba(0,0,0,0.5)] backdrop-blur-md"
+          className="animate-float-y flex items-center gap-2 rounded-xl border px-3.5 py-2 font-bengali text-[11.5px] text-pink-200/70 shadow-[0_16px_48px_-16px_rgba(0,0,0,0.5)] transform-gpu"
           style={{
             borderColor: "var(--theme-surface-border)",
             background: "var(--theme-card-bg)",
@@ -190,7 +190,7 @@ export default function Hero() {
             whileHover={{ y: -3, scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
             transition={{ type: "spring", stiffness: 320, damping: 22 }}
-            className="group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-pink-400/30 bg-pink-500/5 px-8 py-4 font-bengali text-[15px] font-semibold text-pink-100 backdrop-blur transition-all duration-300 hover:border-[#ff758f]/60 hover:bg-pink-500/15 sm:w-auto shadow-[0_0_20px_rgba(255,117,143,0.15)]"
+            className="group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-pink-400/30 bg-pink-500/5 px-8 py-4 font-bengali text-[15px] font-semibold text-pink-100 backdrop-blur transition-[border-color,background-color,box-shadow] duration-300 hover:border-[#ff758f]/60 hover:bg-pink-500/15 sm:w-auto shadow-[0_0_20px_rgba(255,117,143,0.15)]"
           >
             <Map className="size-4 text-pink-300 transition-colors duration-300 group-hover:text-[#ff758f]" />
             <span>রোডম্যাপ দেখুন</span>

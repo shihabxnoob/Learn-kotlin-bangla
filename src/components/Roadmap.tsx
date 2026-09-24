@@ -105,7 +105,7 @@ const DeckCard = memo(function DeckCard({ milestone: m, index: i, total, progres
             scale: isLast ? 1 : scale,
             ["--ac" as string]: accent,
           }}
-          className={`relative overflow-hidden rounded-2xl border border-pink-500/[0.18] bg-[#140b1c] shadow-[0_16px_40px_-15px_rgba(0,0,0,0.8)] transition-all duration-300 group-hover:border-pink-400/40 group-hover:shadow-[0_20px_50px_-12px_rgba(255,117,143,0.3)] transform-gpu ${
+          className={`relative overflow-hidden rounded-2xl border border-pink-500/[0.18] bg-[#140b1c] shadow-[0_16px_40px_-15px_rgba(0,0,0,0.8)] transition-[border-color,box-shadow] duration-300 group-hover:border-pink-400/40 group-hover:shadow-[0_20px_50px_-12px_rgba(255,117,143,0.3)] transform-gpu ${
             i % 2 === 0 ? "md:mr-3" : "md:ml-3"
           }`}
         >
@@ -119,13 +119,13 @@ const DeckCard = memo(function DeckCard({ milestone: m, index: i, total, progres
             }}
           />
 
-          {/* Theme ambient subtle glow scaled by intensity */}
+          {/* Theme ambient subtle glow scaled by intensity — GPU-native gradient without filter cost */}
           <div
             aria-hidden
-            className="pointer-events-none absolute top-0 right-0 w-72 h-36 blur-2xl transition-opacity duration-300"
+            className="pointer-events-none absolute top-0 right-0 w-72 h-36 transition-opacity duration-300"
             style={{
-              background: accent,
-              opacity: "calc(0.22 * var(--bg-glow-scale, 0.6))",
+              background: `radial-gradient(ellipse at top right, ${accent} 0%, transparent 70%)`,
+              opacity: "calc(0.35 * var(--bg-glow-scale, 0.6))",
             }}
           />
 
@@ -279,13 +279,13 @@ export default function Roadmap() {
       aria-labelledby="roadmap-heading"
       className="relative px-4 py-20 sm:px-6 md:py-28 lg:px-8"
     >
-      {/* Background Kitty ambient glow */}
+      {/* Background Kitty ambient glow — GPU optimized blur */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 overflow-hidden -z-10"
+        className="pointer-events-none absolute inset-0 overflow-hidden -z-10 transform-gpu"
       >
-        <div className="absolute left-1/2 top-[8%] h-[520px] w-[680px] -translate-x-1/2 rounded-full bg-[#ff758f]/[0.08] blur-[160px]" />
-        <div className="absolute right-[10%] top-[40%] h-[380px] w-[380px] rounded-full bg-[#c77dff]/[0.06] blur-[140px]" />
+        <div className="absolute left-1/2 top-[8%] h-[480px] w-[640px] -translate-x-1/2 rounded-full bg-[#ff758f]/[0.08] blur-[64px]" />
+        <div className="absolute right-[10%] top-[40%] h-[340px] w-[340px] rounded-full bg-[#c77dff]/[0.06] blur-[64px]" />
       </div>
 
       {/* Section Header */}
