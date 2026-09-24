@@ -715,7 +715,7 @@ const ProgressChip = memo(function ProgressChip({
 
   return (
     <div
-      className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12px] font-mono font-medium select-none shadow-[0_4px_16px_-4px_rgba(0,0,0,0.5)] transition-[border-color,color] duration-150"
+      className="inline-flex items-center gap-1 sm:gap-1.5 rounded-full border px-2 sm:px-2.5 py-1.5 text-[11.5px] sm:text-[12px] font-mono font-medium select-none transition-[border-color,color] duration-150 flex-none whitespace-nowrap"
       style={{
         borderColor: `${accent}35`,
         background: "var(--theme-card-bg, rgba(16, 9, 24, 0.82))",
@@ -727,10 +727,10 @@ const ProgressChip = memo(function ProgressChip({
       title={`পড়ার অগ্রগতি: ${pct}%`}
     >
       <span
-        className="size-1.5 rounded-full transition-colors duration-150"
+        className="size-1.5 rounded-full transition-colors duration-150 flex-none"
         style={{ background: pct >= 95 ? "#10b981" : accent }}
       />
-      <span className="font-sans font-medium text-[11.5px] sm:text-[12px]">Progress ({pct}%)</span>
+      <span>{pct}%</span>
     </div>
   );
 });
@@ -751,16 +751,16 @@ const FloatingLessonNav = memo(function FloatingLessonNav({
   return (
     <nav
       aria-label="লেসন নেভিগেশন ও ইউটিলিটি চিপস"
-      className="sticky top-3 sm:top-4 z-40 w-full pointer-events-none mb-3 sm:mb-4"
+      className="sticky top-2 sm:top-3 z-40 w-full pointer-events-none mb-2 sm:mb-3"
     >
-      <div className="flex flex-wrap items-center justify-between gap-2.5">
+      <div className="flex items-center justify-between gap-1.5 sm:gap-2.5 flex-nowrap w-full">
         {/* Navigation chip: ← [Module]-এ ফিরে যান */}
-        <div className="pointer-events-auto">
+        <div className="pointer-events-auto min-w-0 flex-shrink">
           <Link
             to={`/${moduleSlug}`}
             aria-label={`${moduleTitle}-এ ফিরে যান`}
             title={`${moduleTitle}-এ ফিরে যান`}
-            className="group inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 font-bengali text-[13px] text-pink-200 transition-all duration-150 hover:border-pink-400/50 hover:bg-pink-500/15 hover:text-white active:scale-95 shadow-[0_4px_16px_-4px_rgba(0,0,0,0.5)]"
+            className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full border px-2.5 sm:px-3.5 py-1.5 font-bengali text-[12px] sm:text-[13px] text-pink-200 transition-all duration-150 hover:border-pink-400/50 hover:bg-pink-500/15 hover:text-white active:scale-95 min-w-0"
             style={{
               borderColor: `${accent}40`,
               background: "var(--theme-card-bg, rgba(16, 9, 24, 0.82))",
@@ -770,16 +770,18 @@ const FloatingLessonNav = memo(function FloatingLessonNav({
             }}
           >
             <ArrowLeft
-              className="size-3.5 transition-transform duration-150 group-hover:-translate-x-0.5"
+              className="size-3.5 flex-none transition-transform duration-150 group-hover:-translate-x-0.5"
               style={{ color: accent }}
             />
-            <span className="font-medium">{moduleTitle}-এ ফিরে যান</span>
-            <ThemeChipIcon size={12} color="var(--theme-primary, #ff758f)" />
+            <span className="font-medium truncate whitespace-nowrap">{moduleTitle}-এ ফিরে যান</span>
+            <span className="hidden md:inline-flex flex-none">
+              <ThemeChipIcon size={12} color="var(--theme-primary, #ff758f)" />
+            </span>
           </Link>
         </div>
 
-        {/* Right utility chips: Progress + Theme */}
-        <div className="flex items-center gap-2 pointer-events-auto">
+        {/* Right utility chips: [0%] + [Theme] in same row */}
+        <div className="flex items-center gap-1 sm:gap-1.5 pointer-events-auto flex-none">
           <ProgressChip scrollYProgress={scrollYProgress} accent={accent} />
           <ThemeSwitcher compact pill />
         </div>
@@ -842,7 +844,7 @@ export default function LessonPage() {
         }}
       />
 
-      <div className="relative mx-auto w-full max-w-[45rem] px-4 pb-28 pt-3 sm:px-6 md:pt-5">
+      <div className="relative mx-auto w-full max-w-[45rem] px-3.5 sm:px-6 pb-28 pt-2 sm:pt-4">
         {/* top accent glow — static GPU accelerated */}
         <div
           aria-hidden
@@ -867,7 +869,7 @@ export default function LessonPage() {
           variants={group}
           initial="hidden"
           animate="show"
-          className="relative mt-4 sm:mt-5 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-[#141028] via-[#0e0a1c] to-[#090612] p-6 shadow-2xl sm:p-8"
+          className="relative mt-2.5 sm:mt-4 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-[#141028] via-[#0e0a1c] to-[#090612] p-6 shadow-2xl sm:p-8"
           style={{
             boxShadow: `0 20px 50px -15px ${AC}26, inset 0 1px 0 rgba(255,255,255,0.12)`,
           }}

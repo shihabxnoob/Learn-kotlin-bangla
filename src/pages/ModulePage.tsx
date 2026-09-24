@@ -52,14 +52,14 @@ export default function ModulePage() {
   const bnNumber = bnDigits(module.id); // e.g. "০১", "০২" (single leading zero)
 
   return (
-    <div className="relative z-10 mx-auto w-full max-w-2xl px-4 pb-28 pt-28 sm:px-6 md:pt-32 overflow-x-clip">
+    <div className="relative z-10 mx-auto w-full max-w-2xl px-4 pb-28 pt-20 sm:px-6 md:pt-24 overflow-x-clip">
       {/* Top accent glow matching this milestone's color, scaled by user's bg intensity */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 overflow-hidden -z-10 transform-gpu"
       >
         <div
-          className="absolute left-1/2 top-16 h-[300px] w-[520px] max-w-[100vw] -translate-x-1/2 rounded-full blur-[64px] transition-opacity duration-300"
+          className="absolute left-1/2 top-8 h-[300px] w-[520px] max-w-[100vw] -translate-x-1/2 rounded-full blur-[64px] transition-opacity duration-300"
           style={{
             background: `radial-gradient(circle, ${ac}33 0%, var(--theme-glow) 50%, transparent 80%)`,
             opacity: "calc(0.7 * var(--bg-glow-scale, 0.6))",
@@ -67,24 +67,11 @@ export default function ModulePage() {
         />
       </div>
 
-      {/* Back to roadmap */}
-      <motion.div variants={rise} initial="hidden" animate="show">
-        <Link
-          to="/#roadmap"
-          className="group inline-flex items-center gap-2 rounded-full border border-pink-500/20 bg-[#160c1d]/80 px-4 py-2 font-bengali text-[13px] text-pink-200 transition-all duration-200 hover:border-pink-400/50 hover:bg-pink-500/15 hover:text-white shadow-sm"
-        >
-          <ArrowLeft className="size-4 transition-transform duration-200 group-hover:-translate-x-0.5 text-pink-300" />
-          <span>রোডম্যাপে ফিরে যান</span>
-          <ThemeChipIcon size={12} color="var(--theme-primary, #ff758f)" />
-        </Link>
-      </motion.div>
-
       {/* Module header */}
       <motion.header
         variants={group}
         initial="hidden"
         animate="show"
-        className="mt-8"
       >
         {/* Breadcrumb */}
         <motion.nav
