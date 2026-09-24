@@ -22,10 +22,10 @@
   --theme-primary: #ff758f;
   --theme-secondary: #c77dff;
   --theme-tertiary: #ffa6c1;
-  --theme-glow: rgba(255, 117, 143, 0.4);
-  --theme-secondary-glow: rgba(199, 125, 255, 0.25);
-  --theme-tertiary-glow: rgba(255, 77, 109, 0.15);
-  --theme-grid-tint: rgba(255, 117, 143, 0.04);
+  --theme-glow: rgba(255, 117, 143, 0.22);
+  --theme-secondary-glow: rgba(199, 125, 255, 0.13);
+  --theme-tertiary-glow: rgba(255, 77, 109, 0.08);
+  --theme-grid-tint: rgba(255, 117, 143, 0.075);
   --theme-gradient: linear-gradient(92deg, #ff758f 0%, #ff4d6d 28%, #c77dff 62%, #ffa6c1 95%);
   --theme-scrollbar: linear-gradient(180deg, rgba(255, 117, 143, 0.7), rgba(199, 125, 255, 0.6));
   --theme-surface-border: rgba(255, 117, 143, 0.2);
@@ -40,10 +40,10 @@
   --theme-primary: #38bdf8;
   --theme-secondary: #818cf8;
   --theme-tertiary: #22d3ee;
-  --theme-glow: rgba(56, 189, 248, 0.32);
-  --theme-secondary-glow: rgba(129, 140, 248, 0.22);
-  --theme-tertiary-glow: rgba(34, 211, 238, 0.16);
-  --theme-grid-tint: rgba(56, 189, 248, 0.035);
+  --theme-glow: rgba(56, 189, 248, 0.18);
+  --theme-secondary-glow: rgba(129, 140, 248, 0.11);
+  --theme-tertiary-glow: rgba(34, 211, 238, 0.07);
+  --theme-grid-tint: rgba(56, 189, 248, 0.07);
   --theme-gradient: linear-gradient(92deg, #38bdf8 0%, #22d3ee 30%, #818cf8 68%, #a78bfa 100%);
   --theme-scrollbar: linear-gradient(180deg, rgba(56, 189, 248, 0.7), rgba(129, 140, 248, 0.6));
   --theme-surface-border: rgba(56, 189, 248, 0.22);
@@ -108,14 +108,14 @@ body {
   border: 2px solid var(--color-void);
 }
 
-/* ---------- background grid with theme tint ---------- */
+/* ---------- background grid with theme tint (subtle, consistently visible) ---------- */
 .bg-grid {
   background-image:
     linear-gradient(to right, var(--theme-grid-tint) 1px, transparent 1px),
     linear-gradient(to bottom, var(--theme-grid-tint) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 100% 80% at 50% 0%, black 20%, transparent 78%);
-  -webkit-mask-image: radial-gradient(ellipse 100% 80% at 50% 0%, black 20%, transparent 78%);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(ellipse 130% 100% at 50% 25%, black 65%, rgba(0, 0, 0, 0.4) 100%);
+  -webkit-mask-image: radial-gradient(ellipse 130% 100% at 50% 25%, black 65%, rgba(0, 0, 0, 0.4) 100%);
 }
 
 /* ---------- diagonal micro stripes ---------- */

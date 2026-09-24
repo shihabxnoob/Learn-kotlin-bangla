@@ -19,29 +19,36 @@ const LessonPage = lazy(loadLessonPage);
 
 /**
  * Global, fixed background layers:
- * subtle technical grid + theme-colored glowing orbs scaled by user's bgGlow preference.
- * Uses GPU-optimized blur radius for fluid 60-120fps scrolling on mobile devices.
+ * Grid visibility priority: technical grid rendered with subtle blend over subdued glow orbs.
+ * Deep dark base background is preserved with restrained glow saturation/opacity.
  */
 function BackgroundFX() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-0 overflow-hidden transition-opacity duration-300 transform-gpu"
-      style={{ opacity: "var(--bg-glow-scale, 0.6)" }}
+      className="pointer-events-none fixed inset-0 z-0 overflow-hidden transform-gpu"
     >
+      {/* Background ambient glow - subdued saturation & opacity so dark base stays deep */}
+      <div
+        className="absolute inset-0 overflow-hidden transition-opacity duration-500"
+        style={{ opacity: "calc(var(--bg-glow-scale, 0.6) * 0.72)" }}
+      >
+        <div
+          className="absolute left-1/2 top-[-180px] h-[480px] w-[min(800px,120vw)] -translate-x-1/2 rounded-full blur-[72px] transition-colors duration-700"
+          style={{ background: "var(--theme-glow)" }}
+        />
+        <div
+          className="absolute right-[-140px] top-[38%] h-[380px] w-[380px] rounded-full blur-[72px] transition-colors duration-700"
+          style={{ background: "var(--theme-secondary-glow)" }}
+        />
+        <div
+          className="absolute bottom-[-180px] left-[8%] h-[360px] w-[360px] rounded-full blur-[72px] transition-colors duration-700"
+          style={{ background: "var(--theme-tertiary-glow)" }}
+        />
+      </div>
+
+      {/* Grid visibility priority: layered above glow so grid lines are always crisp, subtle, and never buried under glow */}
       <div className="bg-grid absolute inset-0" />
-      <div
-        className="absolute left-1/2 top-[-180px] h-[480px] w-[min(800px,120vw)] -translate-x-1/2 rounded-full blur-[72px] transition-colors duration-700"
-        style={{ background: "var(--theme-glow)" }}
-      />
-      <div
-        className="absolute right-[-140px] top-[38%] h-[380px] w-[380px] rounded-full blur-[72px] transition-colors duration-700"
-        style={{ background: "var(--theme-secondary-glow)" }}
-      />
-      <div
-        className="absolute bottom-[-180px] left-[8%] h-[360px] w-[360px] rounded-full blur-[72px] transition-colors duration-700"
-        style={{ background: "var(--theme-tertiary-glow)" }}
-      />
     </div>
   );
 }
@@ -69,6 +76,13 @@ function ScrollManager() {
 }
 
 function AppShell() {
+  const location = useLocation();
+  const pathSegments = location.pathname.split("/").filter(Boolean);
+  // Home ('/') has 0 segments, Module ('/:slug') has 1 segment, Lesson ('/:slug/:lessonSlug') has 2 segments.
+  // Home and Module Page keep the existing global Topbar (Navbar) exactly as is.
+  // Lesson Page uses its dedicated compact sticky Lesson Bar.
+  const isLessonPage = pathSegments.length === 2;
+
   // Preload secondary route chunks during browser idle time so transitions feel instantaneous
   useEffect(() => {
     const hasIdle = typeof window !== "undefined" && "requestIdleCallback" in window;
@@ -94,7 +108,7 @@ function AppShell() {
   return (
     <div className="relative min-h-screen bg-[var(--color-void)] font-sans text-slate-200 antialiased transition-colors duration-300">
       <BackgroundFX />
-      <Navbar />
+      {!isLessonPage && <Navbar />}
 
       <main className="relative z-10">
         <Suspense
